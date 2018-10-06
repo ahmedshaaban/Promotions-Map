@@ -1,0 +1,19 @@
+version: "2"
+services:
+  redis:
+    image: 'redis:5.0-rc5-alpine'
+    ports:
+      - '6379:6379'
+  core:
+    restart: on-failure
+    depends_on:
+      - redis
+    build: ./Promotions
+    ports:
+      - 3000:3000
+    volumes:
+      - ./Promotions/store:/usr/src/app/store
+    links:
+      - redis
+    environment:
+      - REDIS_HOST=redis
